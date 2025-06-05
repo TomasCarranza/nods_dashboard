@@ -1,33 +1,24 @@
+// src/components/WeeklySummary.tsx
 import React from 'react';
-import './WeeklySummary.css';
+import SummaryCard from './SummaryCard';
 
-interface WeeklyData {
-  day: string;
-  value: number;
-}
-
-interface WeeklySummaryProps {
-  data: WeeklyData[];
-  title: string;
-}
-
-const WeeklySummary: React.FC<WeeklySummaryProps> = ({ data, title }) => {
+const WeeklySummary: React.FC = () => {
   return (
-    <div className="weekly-summary">
-      <h2>{title}</h2>
-      <div className="weekly-chart">
-        {data.map((item, index) => (
-          <div key={index} className="weekly-bar">
-            <div 
-              className="bar" 
-              style={{ height: `${(item.value / Math.max(...data.map(d => d.value))) * 100}%` }}
-            />
-            <span className="day-label">{item.day}</span>
-          </div>
-        ))}
+    <div className="row g-4">
+      <div className="col-12 col-md-6">
+        <SummaryCard title="Emails enviados" value="12.456" />
+      </div>
+      <div className="col-12 col-md-6">
+        <SummaryCard title="Tasa de apertura (O.R)" value="23.6 %" />
+      </div>
+      <div className="col-12 col-md-6">
+        <SummaryCard title="Tasa de clics (CTR)" value="2.3 %" />
+      </div>
+      <div className="col-12 col-md-6">
+        <SummaryCard title="Tasa de rebote (B.R)" value="0.98 %" />
       </div>
     </div>
   );
 };
 
-export default WeeklySummary; 
+export default WeeklySummary;

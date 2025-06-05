@@ -1,34 +1,25 @@
+// src/components/SummaryCard.tsx
 import React from 'react';
-import './SummaryCard.css';
 
-interface SummaryCardProps {
+interface Props {
   title: string;
-  value: number | string;
-  icon?: string;
-  trend?: {
-    value: number;
-    isPositive: boolean;
-  };
+  value: string;
 }
 
-const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, icon, trend }) => {
-  return (
-    <div className="summary-card">
-      <div className="summary-card-header">
-        <h3>{title}</h3>
-        {icon && <span className="material-icons">{icon}</span>}
-      </div>
-      <div className="summary-card-value">{value}</div>
-      {trend && (
-        <div className={`summary-card-trend ${trend.isPositive ? 'positive' : 'negative'}`}>
-          <span className="material-icons">
-            {trend.isPositive ? 'trending_up' : 'trending_down'}
-          </span>
-          {trend.value}%
-        </div>
-      )}
-    </div>
-  );
-};
+const SummaryCard: React.FC<Props> = ({ title, value }) => (
+  <div
+    className="d-flex flex-column align-items-center justify-content-center w-100 h-100"
+    style={{
+      background: '#232323',
+      borderRadius: '32px',
+      padding: '2.5rem 1rem',
+      minHeight: '160px',
+      boxShadow: '0 0 0 1.5px #353535',
+    }}
+  >
+    <div className="fw-bold" style={{ fontSize: '2.8rem', color: '#E6E6E6', lineHeight: 1 }}>{value}</div>
+    <div className="mt-2" style={{ color: '#A0A0A0', fontSize: '1.2rem', fontWeight: 500 }}>{title}</div>
+  </div>
+);
 
-export default SummaryCard; 
+export default SummaryCard;

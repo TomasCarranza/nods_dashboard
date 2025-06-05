@@ -1,14 +1,27 @@
-import React from 'react';
+// src/App.tsx
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import 'bootstrap/dist/css/bootstrap.css'
+import Home from './pages/Home';
+import CampanasEnviadas from './pages/CampanasEnviadas';
+import Contactos from './pages/Contactos';
+import ChatIA from './pages/ChatIA';
 
-const App: React.FC = () => {
+function App(): JSX.Element {
   return (
-    <div>
-      <Header />
-      {/* Acá después agregamos el Dashboard */}
-    </div>
+    <Router>
+      <div className="bg-black min-vh-100">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/campanas-enviadas" element={<CampanasEnviadas />} />
+          <Route path="/contactos" element={<Contactos />} />
+          <Route path="/chat-ia" element={<ChatIA />} />
+        </Routes>
+      </div>
+    </Router>
   );
-};
+}
 
 export default App;

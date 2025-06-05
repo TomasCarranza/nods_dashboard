@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header: React.FC = () => {
   return (
@@ -43,7 +44,7 @@ const Header: React.FC = () => {
             fontWeight: 600,
             letterSpacing: '-0.03em',
             cursor: 'pointer',
-            fontSize: '1.3em',
+            fontSize: '1.25em',
           }}
         >
           <span style={{ fontSize: '12px' }}>▼</span> UNAB
@@ -62,12 +63,13 @@ const Header: React.FC = () => {
             color: '#FAFAFA',
             fontWeight: 500,
             letterSpacing: '-0.03em',
-            fontSize: '1.3em',
+            fontSize: '1.25em',
           }}
         >
-          <span style={{ cursor: 'pointer' }}>Inicio</span>
-          <span style={{ cursor: 'pointer' }}>Campañas enviadas</span>
-          <span style={{ cursor: 'pointer' }}>Contactos</span>
+          <Link to="/" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer' }}>Inicio</Link>
+          <Link to="/campanas-enviadas" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer' }}>Campañas enviadas</Link>
+          <Link to="/contactos" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer' }}>Contactos</Link>
+          <Link to="/chat-ia" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer' }}>Chat IA</Link>
         </div>
       </div>
     </nav>

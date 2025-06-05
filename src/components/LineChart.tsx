@@ -1,53 +1,35 @@
+// src/components/LineChart.tsx
 import React from 'react';
-import './LineChart.css';
 
-interface DataPoint {
-  x: number | string;
-  y: number;
-}
-
-interface LineChartProps {
-  data: DataPoint[];
-  title: string;
-  xLabel?: string;
-  yLabel?: string;
-}
-
-const LineChart: React.FC<LineChartProps> = ({ data, title, xLabel, yLabel }) => {
-  const maxY = Math.max(...data.map(point => point.y));
-  const minY = Math.min(...data.map(point => point.y));
-  const range = maxY - minY;
-
-  return (
-    <div className="line-chart">
-      <h2>{title}</h2>
-      <div className="chart-container">
-        {yLabel && <div className="y-label">{yLabel}</div>}
-        <div className="chart">
-          <svg viewBox={`0 0 ${data.length * 50} 200`}>
-            <path
-              d={data.map((point, index) => {
-                const x = index * 50;
-                const y = 200 - ((point.y - minY) / range) * 180;
-                return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
-              }).join(' ')}
-              className="line"
-            />
-            {data.map((point, index) => (
-              <circle
-                key={index}
-                cx={index * 50}
-                cy={200 - ((point.y - minY) / range) * 180}
-                r="4"
-                className="point"
-              />
-            ))}
-          </svg>
-        </div>
-        {xLabel && <div className="x-label">{xLabel}</div>}
+const LineChart: React.FC = () => (
+  <div className="h-100">
+    <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="d-flex gap-3">
+        <button className="btn btn-outline-light btn-sm">7 días</button>
+        <button className="btn btn-outline-light btn-sm">30 días</button>
+        <button className="btn btn-outline-light btn-sm">90 días</button>
+      </div>
+      <div className="d-flex gap-2">
+        <span className="badge bg-primary">Enviados</span>
+        <span className="badge bg-success">Aperturas</span>
+        <span className="badge bg-info">Clics</span>
       </div>
     </div>
-  );
-};
+    <div 
+      style={{ 
+        height: '300px', 
+        background: 'linear-gradient(180deg, rgba(25, 70, 227, 0.1) 0%, rgba(25, 70, 227, 0) 100%)',
+        borderRadius: '12px',
+        border: '1px solid rgba(25, 70, 227, 0.2)',
+        padding: '20px'
+      }}
+    >
+      {/* Aquí iría el gráfico real */}
+      <div className="d-flex justify-content-center align-items-center h-100 text-secondary">
+        Gráfico de rendimiento
+      </div>
+    </div>
+  </div>
+);
 
-export default LineChart; 
+export default LineChart;
