@@ -11,7 +11,7 @@ const Header: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: 'Poppins',
       }}
     >
       {/* Logo y texto NODS */}

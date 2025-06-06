@@ -1,5 +1,6 @@
 // src/components/InsightCard.tsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const InsightCard: React.FC = () => (
   <div className="h-100">
@@ -27,9 +28,11 @@ const InsightCard: React.FC = () => (
       </p>
     </div>
 
-    <button className="btn btn-primary w-100 mt-3">
-      💬 Hacer preguntas sobre las campañas
-    </button>
+    <Link to="/chat-ia">
+      <button className="btn btn-primary w-100 mt-3">
+        💬 Hacer preguntas sobre las campañas
+      </button>
+    </Link>
   </div>
 );
 

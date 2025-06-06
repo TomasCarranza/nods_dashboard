@@ -5,3 +5,8 @@ body {
   letter-spacing: -0.03em;
   margin: 0;
 }
+
+body * {
+  font-family: 'Poppins', sans-serif;
+}
+

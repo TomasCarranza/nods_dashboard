@@ -17,8 +17,8 @@ const SummaryCard: React.FC<Props> = ({ title, value }) => (
       boxShadow: '0 0 0 1.5px #353535',
     }}
   >
-    <div className="fw-bold" style={{ fontSize: '2.8rem', color: '#E6E6E6', lineHeight: 1 }}>{value}</div>
-    <div className="mt-2" style={{ color: '#A0A0A0', fontSize: '1.2rem', fontWeight: 500 }}>{title}</div>
+    <div className="fw-bold" style={{ fontSize: '2.3rem', color: '#E6E6E6', lineHeight: 1 }}>{value}</div>
+    <div className="mt-2" style={{ color: '#A0A0A0', fontSize: '1rem', fontWeight: 500 }}>{title}</div>
   </div>
 );
 
