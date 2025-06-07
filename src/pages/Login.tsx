@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import './Login.css'
 
 // Import the logo image
 import NodsLogo from '/LogoNods.png'
@@ -11,6 +12,7 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
   const navigate = useNavigate()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -21,7 +23,7 @@ export default function Login() {
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
-        password,
+        password
       })
 
       if (error) throw error
@@ -42,8 +44,8 @@ export default function Login() {
       {/* Use the image for the logo */}
       <img src={NodsLogo} alt="NODS Logo" className="mb-4" style={{ width: '150px' }} /> {/* Adjust width as needed */}
 
-      <div className="card custom-card-bg border-0 rounded-lg shadow" style={{ maxWidth: '650px', width: '100%' }}>
-        <div className="card-body custom-form-bg p-4">
+      <div className="card custom-card-bg" style={{ maxWidth: '650px', width: '100%', backgroundColor: '#121212', border: 'none', boxShadow: 'none', borderRadius: '50px' }}>
+        <div className="card-body custom-form-bg p-4" style={{ backgroundColor: '#121212', borderRadius: '30px' }}>
           <h2 className="card-title text-center text-white mb-4">Iniciar sesión en tu cuenta</h2>
           <form onSubmit={handleLogin}>
             <div className="mb-3">
@@ -87,6 +89,19 @@ export default function Login() {
                   )}
                 </button>
               </div>
+            </div>
+
+            <div className="mb-3 form-check">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="rememberMe"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <label className="form-check-label text-white" htmlFor="rememberMe">
+                Recordarme
+              </label>
             </div>
 
             {error && (

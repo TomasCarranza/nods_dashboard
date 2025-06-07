@@ -10,6 +10,8 @@ import Contactos from './pages/Contactos';
 import ChatIA from './pages/ChatIA';
 import Login from './pages/Login';
 import { supabase } from './lib/supabase';
+import { useClient } from './context/ClientContext'
+import { ClientDropdown } from './components/ClientDropdown'
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const [session, setSession] = useState<any>(null);
@@ -25,27 +27,31 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-white">
-        Cargando...
-      </div>
-    );
+    return <div>Cargando...</div>; // O un spinner de carga
   }
 
   if (!session) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  );
 }
 
 function App(): JSX.Element {
+  const { client } = useClient();
+
   return (
     <Router>
       <div className="bg-black min-vh-100">
@@ -55,10 +61,7 @@ function App(): JSX.Element {
             path="/"
             element={
               <ProtectedRoute>
-                <>
-                  <Header />
-                  <Home />
-                </>
+                <Home />
               </ProtectedRoute>
             }
           />
@@ -66,10 +69,7 @@ function App(): JSX.Element {
             path="/campanas-enviadas"
             element={
               <ProtectedRoute>
-                <>
-                  <Header />
-                  <CampanasEnviadas />
-                </>
+                <CampanasEnviadas />
               </ProtectedRoute>
             }
           />
@@ -77,10 +77,7 @@ function App(): JSX.Element {
             path="/contactos"
             element={
               <ProtectedRoute>
-                <>
-                  <Header />
-                  <Contactos />
-                </>
+                <Contactos />
               </ProtectedRoute>
             }
           />
@@ -88,10 +85,7 @@ function App(): JSX.Element {
             path="/chat-ia"
             element={
               <ProtectedRoute>
-                <>
-                  <Header />
-                  <ChatIA />
-                </>
+                <ChatIA />
               </ProtectedRoute>
             }
           />

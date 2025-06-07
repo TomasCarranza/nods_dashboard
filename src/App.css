@@ -1,112 +1,83 @@
+/* Estilos globales y para la tabla */
+
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to bottom, #0A0A0A, #111111);
-  color: white;
-  letter-spacing: -0.03em;
-  margin: 0;
+    background-color: #000000;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    letter-spacing: -0.03em;
+    margin: 0;
 }
 
 body * {
-  font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
-.custom-card-bg {
-  background-color: #121212 !important;
-  border-radius: 50px !important;
-  align-items: center;
+.custom-navbar-bg {
+    background: linear-gradient(to bottom, #131313, #0A0A0A);
+    border-bottom: 1px solid #353535;
 }
 
-.custom-form-bg {
-  background-color: #121212 !important;
-  padding: 30px !important;
-  border-radius: 30px !important;
-  align-items: center;
+.custom-table-rounded {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2C2C2C;
+    width: 100%;
+    table-layout: fixed;
 }
 
-.custom-input-bg {
-  background-color: #282828 !important;
-  border: none !important;
-  color: #828282 !important;
-  padding: 12px 20px !important;
+.custom-table-rounded thead th {
+    background-color: #1A1A1A;
+    color: #FAFAFA;
+    border-bottom: none;
+    padding: 12px 5px;
+    text-align: center;
+    word-break: break-word;
 }
 
-.custom-text-color {
-  color: #828282 !important;
+.custom-table-rounded tbody tr {
+    background-color: #0A0A0A;
 }
 
-/* Placeholder styles */
-.custom-input-bg::placeholder {
-  color: #bdbdbd !important; /* Slightly darker grey color */
-  font-family: 'Poppins', sans-serif !important;
-  font-weight: 200 !important;
-  font-style: italic !important;
-  font-size: 0.9em !important; /* Slightly smaller font size */
+.custom-table-rounded tbody tr:nth-of-type(odd) {
+    background-color: #131313;
 }
 
-.custom-input-bg:-ms-input-placeholder {
-  color: #bdbdbd !important; /* For Internet Explorer */
-  font-family: 'Poppins', sans-serif !important;
-  font-weight: 200 !important;
-  font-style: italic !important;
-  font-size: 0.9em !important;
+.custom-table-rounded tbody td {
+    color: #CCCCCC;
+    padding: 10px 5px;
+    border-top: 1px solid #2C2C2C;
+    border-right: 1px solid #1A1A1A;
+    word-break: break-word;
+    text-align: center;
+    vertical-align: middle;
 }
 
-.custom-login-button {
-  border: 2px solid #1946E3 !important;
-  color: #fafafa !important;
-  background-color: transparent !important;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  padding: 12px 20px !important;
-  border-radius: 50rem !important;
-  max-width: 200px;
-  width: 100%;
+.custom-table-rounded tbody td:last-child {
+    border-right: none;
 }
 
-.custom-login-button:hover {
-  background-color: #1946E3 !important;
-  color: white !important;
-  font-weight: 700 !important;
-  border-color: #1946E3 !important;
+/* Estilos de paginación */
+.custom-pagination .page-item .page-link {
+    background-color: #1A1A1A;
+    border-color: #353535;
+    color: #FAFAFA;
 }
 
-.input-group .btn.custom-input-bg {
-  border: none !important;
-  background-color: #282828 !important;
-  color: #828282 !important;
-  padding: 12px 15px !important;
+.custom-pagination .page-item.active .page-link {
+    background-color: #1946E3;
+    border-color: #1946E3;
+    color: #FFFFFF;
 }
 
-.input-group .btn.custom-input-bg:hover {
-  color: white !important;
-  background-color: #282828 !important;
+.custom-pagination .page-item .page-link:hover:not(.active) {
+    background-color: #2C2C2C;
+    border-color: #444444;
+    color: #FAFAFA;
 }
 
-.input-group.rounded-pill > .form-control,
-.input-group.rounded-pill > .btn {
-  border-radius: 50rem !important;
-}
-
-.input-group.rounded-pill > .form-control:not(:last-child),
-.input-group.rounded-pill > .btn:not(:last-child) {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
-
-.input-group.rounded-pill > .form-control:not(:first-child),
-.input-group.rounded-pill > .btn:not(:first-child) {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-}
-
-.input-group.rounded-pill > .btn:last-child {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-}
-
-.input-group.rounded-pill > .form-control:first-child,
-.input-group.rounded-pill > .btn:first-child {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
+.custom-pagination .page-item.disabled .page-link {
+    background-color: #0A0A0A;
+    border-color: #2C2C2C;
+    color: #666666;
 }
 

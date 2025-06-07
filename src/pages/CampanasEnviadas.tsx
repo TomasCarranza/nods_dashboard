@@ -1,11 +1,10 @@
 import React from 'react';
+import CampaniasTable from '../components/CampaniasTable';
 
 const CampanasEnviadas: React.FC = () => (
-  <div className="container py-5">
+  <div className="py-5" style={{ maxWidth: '1800px', margin: '0 auto' }}>
     <h2 className="text-white mb-4">Campañas enviadas</h2>
-    <div className="bg-dark rounded-4 border border-secondary p-5 text-secondary">
-      Aquí se mostrarán las campañas enviadas.
-    </div>
+    <CampaniasTable />
   </div>
 );
 

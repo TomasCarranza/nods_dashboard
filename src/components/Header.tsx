@@ -1,13 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { useClient } from '../context/ClientContext'
 
 // Import the logo image
 import NodsLogo from '/LogoNods.png';
 
+// Lista de clientes de ejemplo
+const CLIENTES = [
+  { id: 'unab', nombre: 'UNAB' },
+  { id: 'crexe', nombre: 'Crexe' },
+  { id: 'anahuac', nombre: 'Anahuac' }
+];
+
 const Header: React.FC = () => {
   const [session, setSession] = useState<any>(null);
   const navigate = useNavigate();
+  const { client, setClient } = useClient();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -28,11 +37,6 @@ const Header: React.FC = () => {
     navigate('/login');
   };
 
-  // Only render the header if there's a session (user is logged in)
-  if (!session) {
-    return null; // Or a minimal header if needed when not logged in
-  }
-
   return (
     <nav
       style={{
@@ -41,7 +45,7 @@ const Header: React.FC = () => {
         borderBottom: '1px solid #353535',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between', // Space out the main sections
+        justifyContent: 'space-between',
         fontFamily: 'Poppins',
       }}
     >
@@ -51,8 +55,7 @@ const Header: React.FC = () => {
       </div>
 
       {/* Navigation and Client Selector */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}> {/* Gap between selector and menu */}
-
+      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
         {/* Dropdown cliente */}
         <div
           style={{
@@ -70,7 +73,27 @@ const Header: React.FC = () => {
             fontSize: '1.25em',
           }}
         >
-          <span style={{ fontSize: '12px' }}>▼</span> UNAB
+          <select
+            value={client || ''}
+            onChange={(e) => setClient(e.target.value)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#FAFAFA',
+              fontWeight: 600,
+              fontSize: '1em',
+              cursor: 'pointer',
+              outline: 'none',
+              width: '100%',
+            }}
+          >
+            <option value="">Seleccionar cliente</option>
+            {CLIENTES.map((cliente) => (
+              <option key={cliente.id} value={cliente.id} style={{ background: '#0A0A0A' }}>
+                {cliente.nombre}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Menú de navegación */}
