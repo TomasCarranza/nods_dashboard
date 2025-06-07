@@ -10,3 +10,103 @@ body * {
   font-family: 'Poppins', sans-serif;
 }
 
+.custom-card-bg {
+  background-color: #121212 !important;
+  border-radius: 50px !important;
+  align-items: center;
+}
+
+.custom-form-bg {
+  background-color: #121212 !important;
+  padding: 30px !important;
+  border-radius: 30px !important;
+  align-items: center;
+}
+
+.custom-input-bg {
+  background-color: #282828 !important;
+  border: none !important;
+  color: #828282 !important;
+  padding: 12px 20px !important;
+}
+
+.custom-text-color {
+  color: #828282 !important;
+}
+
+/* Placeholder styles */
+.custom-input-bg::placeholder {
+  color: #bdbdbd !important; /* Slightly darker grey color */
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 200 !important;
+  font-style: italic !important;
+  font-size: 0.9em !important; /* Slightly smaller font size */
+}
+
+.custom-input-bg:-ms-input-placeholder {
+  color: #bdbdbd !important; /* For Internet Explorer */
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 200 !important;
+  font-style: italic !important;
+  font-size: 0.9em !important;
+}
+
+.custom-login-button {
+  border: 2px solid #1946E3 !important;
+  color: #fafafa !important;
+  background-color: transparent !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 12px 20px !important;
+  border-radius: 50rem !important;
+  max-width: 200px;
+  width: 100%;
+}
+
+.custom-login-button:hover {
+  background-color: #1946E3 !important;
+  color: white !important;
+  font-weight: 700 !important;
+  border-color: #1946E3 !important;
+}
+
+.input-group .btn.custom-input-bg {
+  border: none !important;
+  background-color: #282828 !important;
+  color: #828282 !important;
+  padding: 12px 15px !important;
+}
+
+.input-group .btn.custom-input-bg:hover {
+  color: white !important;
+  background-color: #282828 !important;
+}
+
+.input-group.rounded-pill > .form-control,
+.input-group.rounded-pill > .btn {
+  border-radius: 50rem !important;
+}
+
+.input-group.rounded-pill > .form-control:not(:last-child),
+.input-group.rounded-pill > .btn:not(:last-child) {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.input-group.rounded-pill > .form-control:not(:first-child),
+.input-group.rounded-pill > .btn:not(:first-child) {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.input-group.rounded-pill > .btn:last-child {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.input-group.rounded-pill > .form-control:first-child,
+.input-group.rounded-pill > .btn:first-child {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
