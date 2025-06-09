@@ -18,9 +18,13 @@ interface Campania {
   ctor: number;
 }
 
+interface CampaniasTableProps {
+  searchTerm: string;
+}
+
 const CAMPAIGNS_PER_PAGE = 20;
 
-export default function CampaniasTable() {
+export default function CampaniasTable({ searchTerm }: CampaniasTableProps) {
   const { client } = useClient();
   const [campaigns, setCampaigns] = useState<Campania[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,6 +55,11 @@ export default function CampaniasTable() {
           { count: 'exact' }
         ).eq('cliente_id', client);
 
+        // Aplicar filtro de búsqueda si existe
+        if (searchTerm) {
+          query = query.ilike('campaign_name', `%${searchTerm}%`);
+        }
+
         // Apply sorting
         if (sortColumn && sortDirection) {
           query = query.order(sortColumn as string, { ascending: sortDirection === 'asc' });
@@ -71,7 +80,7 @@ export default function CampaniasTable() {
     }
 
     fetchCampaigns();
-  }, [client, currentPage, sortColumn, sortDirection]);
+  }, [client, currentPage, sortColumn, sortDirection, searchTerm]);
 
   const handleSort = (column: keyof Campania) => {
     if (sortColumn === column) {
