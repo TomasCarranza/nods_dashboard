@@ -20,11 +20,13 @@ interface Campania {
 
 interface CampaniasTableProps {
   searchTerm: string;
+  selectedColumns: string[];
+  filterCriteria: { [key: string]: string };
 }
 
 const CAMPAIGNS_PER_PAGE = 20;
 
-export default function CampaniasTable({ searchTerm }: CampaniasTableProps) {
+export default function CampaniasTable({ searchTerm, selectedColumns, filterCriteria }: CampaniasTableProps) {
   const { client } = useClient();
   const [campaigns, setCampaigns] = useState<Campania[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,6 +62,14 @@ export default function CampaniasTable({ searchTerm }: CampaniasTableProps) {
           query = query.ilike('campaign_name', `%${searchTerm}%`);
         }
 
+        // Aplicar filtros de fecha
+        if (filterCriteria.startDate) {
+          query = query.gte('fecha_envio', filterCriteria.startDate);
+        }
+        if (filterCriteria.endDate) {
+          query = query.lte('fecha_envio', filterCriteria.endDate + 'T23:59:59.999Z'); // Incluir el día completo
+        }
+
         // Apply sorting
         if (sortColumn && sortDirection) {
           query = query.order(sortColumn as string, { ascending: sortDirection === 'asc' });
@@ -80,7 +90,7 @@ export default function CampaniasTable({ searchTerm }: CampaniasTableProps) {
     }
 
     fetchCampaigns();
-  }, [client, currentPage, sortColumn, sortDirection, searchTerm]);
+  }, [client, currentPage, sortColumn, sortDirection, searchTerm, filterCriteria.startDate, filterCriteria.endDate]);
 
   const handleSort = (column: keyof Campania) => {
     if (sortColumn === column) {
@@ -103,6 +113,27 @@ export default function CampaniasTable({ searchTerm }: CampaniasTableProps) {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const allColumnsDefinition = [
+    { key: 'fecha_envio', name: 'Fecha de Envío' },
+    { key: 'campaign_name', name: 'Nombre de Campaña' },
+    { key: 'remitente', name: 'Remitente' },
+    { key: 'asunto', name: 'Asunto' },
+    { key: 'emails_entregados', name: 'Emails Entregados' },
+    { key: 'aperturas_unicas', name: 'Aperturas Únicas' },
+    { key: 'clicks_unicos', name: 'Clicks Únicos' },
+    { key: 'rebotes_total', name: 'Rebotes Total' },
+    { key: 'rebotes_duros', name: 'Rebotes Duros' },
+    { key: 'rebotes_suaves', name: 'Rebotes Suaves' },
+    { key: 'open_rate', name: 'Open Rate' },
+    { key: 'ctr', name: 'CTR' },
+    { key: 'ctor', name: 'CTOR' },
+  ];
+
+  const getColumnName = (key: string) => {
+    const column = allColumnsDefinition.find(col => col.key === key);
+    return column ? column.name : key;
   };
 
   if (!client) {
@@ -140,40 +171,29 @@ export default function CampaniasTable({ searchTerm }: CampaniasTableProps) {
           <table className="table table-dark custom-table-rounded" style={{ backgroundColor: 'transparent', width: '100%' }}>
             <thead>
               <tr>
-                {/* Headers with sort */} 
-                <th onClick={() => handleSort('fecha_envio')} style={{ cursor: 'pointer' }}>Fecha de Envío{getSortIndicator('fecha_envio')}</th>
-                <th onClick={() => handleSort('campaign_name')} style={{ cursor: 'pointer' }}>Nombre de Campaña{getSortIndicator('campaign_name')}</th>
-                <th onClick={() => handleSort('remitente')} style={{ cursor: 'pointer' }}>Remitente{getSortIndicator('remitente')}</th>
-                <th onClick={() => handleSort('asunto')} style={{ cursor: 'pointer' }}>Asunto{getSortIndicator('asunto')}</th>
-                <th onClick={() => handleSort('emails_entregados')} style={{ cursor: 'pointer' }}>Emails Entregados{getSortIndicator('emails_entregados')}</th>
-                <th onClick={() => handleSort('aperturas_unicas')} style={{ cursor: 'pointer' }}>Aperturas Únicas{getSortIndicator('aperturas_unicas')}</th>
-                <th onClick={() => handleSort('clicks_unicos')} style={{ cursor: 'pointer' }}>Clicks Únicos{getSortIndicator('clicks_unicos')}</th>
-                <th onClick={() => handleSort('rebotes_total')} style={{ cursor: 'pointer' }}>Rebotes Total{getSortIndicator('rebotes_total')}</th>
-                <th onClick={() => handleSort('rebotes_duros')} style={{ cursor: 'pointer' }}>Rebotes Duros{getSortIndicator('rebotes_duros')}</th>
-                <th onClick={() => handleSort('rebotes_suaves')} style={{ cursor: 'pointer' }}>Rebotes Suaves{getSortIndicator('rebotes_suaves')}</th>
-                <th>Open Rate</th>
-                <th>CTR</th>
-                <th>CTOR</th>
+                {selectedColumns.map(columnKey => (
+                  <th
+                    key={columnKey}
+                    onClick={() => handleSort(columnKey as keyof Campania)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {getColumnName(columnKey)}{getSortIndicator(columnKey as keyof Campania)}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
             {campaigns.map((campania, index) => (
-  <tr key={index}>
-    <td>{campania.fecha_envio}</td>
-    <td>{campania.campaign_name}</td>
-    <td>{campania.remitente}</td>
-    <td>{campania.asunto}</td>
-    <td>{campania.emails_entregados}</td>
-    <td>{campania.aperturas_unicas}</td>
-    <td>{campania.clicks_unicos}</td>
-    <td>{campania.rebotes_total}</td>
-    <td>{campania.rebotes_duros}</td>
-    <td>{campania.rebotes_suaves}</td>
-    <td>{(campania.open_rate ?? 0).toFixed(2)}%</td> 
-    <td>{(campania.ctr ?? 0).toFixed(2)}%</td>
-    <td>{(campania.ctor ?? 0).toFixed(2)}%</td>
-  </tr>
-))}
+              <tr key={index}>
+                {selectedColumns.map(columnKey => {
+                  let displayValue = campania[columnKey as keyof Campania];
+                  if (columnKey === 'open_rate' || columnKey === 'ctr' || columnKey === 'ctor') {
+                    displayValue = `${(displayValue as number ?? 0).toFixed(2)}%`;
+                  }
+                  return <td key={columnKey}>{displayValue}</td>;
+                })}
+              </tr>
+            ))}
             </tbody>
           </table>
           <nav>

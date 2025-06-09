@@ -18,23 +18,30 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Obtener la sesión actual
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    // Suscribirse a cambios en la autenticación
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    // Limpiar la suscripción al desmontar
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   if (loading) {
-    return <div>Cargando...</div>; // O un spinner de carga
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-black">
+        <div className="text-white">Cargando...</div>
+      </div>
+    );
   }
 
   if (!session) {

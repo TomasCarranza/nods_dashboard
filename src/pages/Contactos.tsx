@@ -1,7 +1,8 @@
 import React from 'react';
+import { BsSearch } from 'react-icons/bs';
 
 const Contactos: React.FC = () => (
-  <div className="py-5" style={{ maxWidth: '1800px', margin: '0 auto' }}>
+  <div className="py-5 px-4" style={{ maxWidth: '1800px', margin: '0 auto' }}>
     <h2 className="text-white mb-4">Contactos</h2>
     
     {/* Sección para buscar información de un contacto */}
@@ -42,7 +43,7 @@ const Contactos: React.FC = () => (
             color: '#A0A0A0'
           }}
         >
-          🔍
+          <BsSearch size={18} />
         </span>
       </div>
     </div>
@@ -85,7 +86,7 @@ const Contactos: React.FC = () => (
             color: '#A0A0A0'
           }}
         >
-          🔍
+          <BsSearch size={18} />
         </span>
       </div>
     </div>

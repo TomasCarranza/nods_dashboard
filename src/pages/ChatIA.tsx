@@ -1,4 +1,5 @@
 import React from 'react';
+import { BsRobot } from 'react-icons/bs';
 
 const ChatIA: React.FC = () => (
   <div className="container py-5">
@@ -12,8 +13,7 @@ const ChatIA: React.FC = () => (
         {/* Mensaje inicial */}
         <div className="d-flex align-items-start gap-3 mb-3">
           <div className="p-2 bg-primary bg-opacity-10 rounded-circle">
-            {/* Icono o avatar de IA */}
-            🤖
+            <BsRobot className="text-primary" size={24} />
           </div>
           <div className="flex-grow-1">
             <div className="text-white">¡Hola! ¿En qué te puedo ayudar?</div>
