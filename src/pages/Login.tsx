@@ -21,6 +21,9 @@ export default function Login() {
     setLoading(true)
 
     try {
+      if (!supabase) {
+        throw new Error('Supabase no está configurado');
+      }
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password

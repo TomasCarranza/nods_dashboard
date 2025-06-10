@@ -71,6 +71,9 @@ const CampanasEnviadas: React.FC = () => {
     }
 
     try {
+      if (!supabase) {
+        throw new Error('Supabase no está configurado');
+      }
       let query = supabase.from('all_campaigns').select(
         'fecha_envio,campaign_name,remitente,asunto,emails_entregados,aperturas_unicas,clicks_unicos,rebotes_total,rebotes_duros,rebotes_suaves,open_rate,ctr,ctor',
       ).eq('cliente_id', client);

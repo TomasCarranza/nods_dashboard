@@ -10,7 +10,6 @@ import Contactos from './pages/Contactos';
 import ChatIA from './pages/ChatIA';
 import Login from './pages/Login';
 import { supabase, isSupabaseConfigured } from './lib/supabase';
-import { useClient } from './context/ClientContext'
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const [session, setSession] = useState<any>(null);

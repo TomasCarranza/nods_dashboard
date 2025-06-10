@@ -49,6 +49,9 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
       setLoading(true);
       setError(null);
       try {
+        if (!supabase) {
+          throw new Error('Supabase no está configurado');
+        }
         const from = (currentPage - 1) * CAMPAIGNS_PER_PAGE;
         const to = from + CAMPAIGNS_PER_PAGE - 1;
 
