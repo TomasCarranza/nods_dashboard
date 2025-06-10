@@ -2,7 +2,7 @@ import React from 'react';
 import WeeklySummary from '../components/WeeklySummary';
 import InsightCard from '../components/InsightCard';
 import LineChart from '../components/LineChart';
-import { BsCalendar } from 'react-icons/bs';
+import { BsCalendar, BsGraphUp } from 'react-icons/bs';
 
 const Home: React.FC = () => (
   <div className="container py-5">
@@ -20,6 +20,12 @@ const Home: React.FC = () => (
       </div>
       <div className="col-md-6">
         <div className="card rounded-4 h-100 p-4" style={{ backgroundColor: '#1A1A1A', border: '1px solid #353535' }}>
+          <div className="d-flex align-items-center mb-3">
+            <div className="p-2 bg-primary bg-opacity-10 rounded-3 me-2">
+              <BsGraphUp className="text-primary" size={20} />
+            </div>
+            <span className="text-secondary fw-semibold">Campañas enviadas</span>
+          </div>
           <LineChart />
         </div>
       </div>

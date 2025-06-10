@@ -92,7 +92,7 @@ const WeeklySummary: React.FC = () => {
       <div className="row g-4">
         <div className="col-12">
           <div className="text-white text-center">
-            <p>No hay campañas disponibles para este cliente.</p>
+            <p>No hay campañas disponibles para este cliente en el resumen semanal.</p>
           </div>
         </div>
       </div>
