@@ -4,7 +4,8 @@ import { useClient } from '../context/ClientContext';
 const CLIENTES = [
   { id: 'unab', nombre: 'UNAB' },
   { id: 'crexe', nombre: 'Crexe' },
-  { id: 'anahuac', nombre: 'Anahuac' }
+  { id: 'anahuac', nombre: 'Anahuac' },
+  { id: 'ulinea', nombre: 'Ulinea' }
 ];
 
 export function ClientDropdown() {

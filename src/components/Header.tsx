@@ -12,7 +12,10 @@ const CLIENTES = [
   { id: 'crexe', nombre: 'Crexe' },
   { id: 'anahuac', nombre: 'Anahuac' },
   { id: 'cesa_admisiones', nombre: 'Cesa Admisiones', remitente: 'educontinua.aspirante@cesa.edu.co' },
-  { id: 'cesa_servicios', nombre: 'Cesa Servicios', remitente: 'experiencia.luna@cesa.edu.co' }
+  { id: 'cesa_servicios', nombre: 'Cesa Servicios', remitente: 'experiencia.luna@cesa.edu.co' },
+  { id: 'ulinea', nombre: 'Ulinea' },
+  { id: 'aliatb2c', nombre: 'Aliat B2C' },
+  { id: 'aliatb2b', nombre: 'Aliat B2B' }
 ];
 
 const Header: React.FC = () => {
