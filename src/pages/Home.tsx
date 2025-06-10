@@ -20,12 +20,12 @@ const Home: React.FC = () => (
       </div>
       <div className="col-md-6">
         <div className="card rounded-4 h-100 p-4" style={{ backgroundColor: '#1A1A1A', border: '1px solid #353535' }}>
-          <InsightCard />
+          <LineChart />
         </div>
       </div>
       <div className="col-md-6">
         <div className="card rounded-4 h-100 p-4" style={{ backgroundColor: '#1A1A1A', border: '1px solid #353535' }}>
-          <LineChart />
+          <InsightCard />
         </div>
       </div>
       <div className="col-md-6">
