@@ -9,26 +9,30 @@ import CampanasEnviadas from './pages/CampanasEnviadas';
 import Contactos from './pages/Contactos';
 import ChatIA from './pages/ChatIA';
 import Login from './pages/Login';
-import { supabase } from './lib/supabase';
+import { supabase, isSupabaseConfigured } from './lib/supabase';
 import { useClient } from './context/ClientContext'
-import { ClientDropdown } from './components/ClientDropdown'
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      setLoading(false);
+      return;
+    }
+
     // Obtener la sesión actual
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase?.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
     });
 
     // Suscribirse a cambios en la autenticación
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase?.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setLoading(false);
-    });
+    }) || { data: { subscription: { unsubscribe: () => {} } } };
 
     // Limpiar la suscripción al desmontar
     return () => {
@@ -40,6 +44,14 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
     return (
       <div className="d-flex justify-content-center align-items-center min-vh-100 bg-black">
         <div className="text-white">Cargando...</div>
+      </div>
+    );
+  }
+
+  if (!isSupabaseConfigured()) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-black">
+        <div className="text-white">Error: Supabase no está configurado correctamente</div>
       </div>
     );
   }
@@ -57,8 +69,6 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
 }
 
 function App(): JSX.Element {
-  const { client } = useClient();
-
   return (
     <Router>
       <div className="bg-black min-vh-100">

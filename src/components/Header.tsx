@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { useClient } from '../context/ClientContext'
 
 // Import the logo image
@@ -19,9 +19,8 @@ const CLIENTES = [
 ];
 
 const Header: React.FC = () => {
-  const [session, setSession] = useState<any>(null);
   const navigate = useNavigate();
-  const { client, setClient, setSelectedRemitente } = useClient();
+  const { setClient, setSelectedRemitente } = useClient();
   const [selectedClientId, setSelectedClientId] = useState<string>('');
 
   const handleClientChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -38,22 +37,10 @@ const Header: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    if (isSupabaseConfigured()) {
+      await supabase?.auth.signOut();
+    }
     navigate('/login');
   };
 

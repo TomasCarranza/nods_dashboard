@@ -9,12 +9,12 @@ console.log('Variables de entorno:', {
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!supabaseUrl) {
-  throw new Error('VITE_SUPABASE_URL no está definida en las variables de entorno')
-}
+// Crear el cliente de Supabase solo si las variables de entorno están disponibles
+export const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null
 
-if (!supabaseAnonKey) {
-  throw new Error('VITE_SUPABASE_ANON_KEY no está definida en las variables de entorno')
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey) 
+// Función auxiliar para verificar si Supabase está configurado
+export const isSupabaseConfigured = () => {
+  return supabase !== null
+} 
