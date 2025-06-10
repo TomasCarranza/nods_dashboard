@@ -5,6 +5,8 @@ import type { ReactNode } from 'react';
 interface ClientContextType {
   client: string | null;
   setClient: (value: string) => void;
+  selectedRemitente: string | null;
+  setSelectedRemitente: (value: string | null) => void;
 }
 
 // Creamos el contexto con un valor inicial
@@ -18,10 +20,13 @@ interface ClientProviderProps {
 // Componente Provider
 export function ClientProvider({ children }: ClientProviderProps) {
   const [client, setClient] = useState<string | null>(null);
+  const [selectedRemitente, setSelectedRemitente] = useState<string | null>(null);
 
   const value = {
     client,
     setClient,
+    selectedRemitente,
+    setSelectedRemitente
   };
 
   return (

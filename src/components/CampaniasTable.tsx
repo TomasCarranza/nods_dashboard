@@ -27,7 +27,7 @@ interface CampaniasTableProps {
 const CAMPAIGNS_PER_PAGE = 20;
 
 export default function CampaniasTable({ searchTerm, selectedColumns, filterCriteria }: CampaniasTableProps) {
-  const { client } = useClient();
+  const { client, selectedRemitente } = useClient();
   const [campaigns, setCampaigns] = useState<Campania[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,6 +56,11 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
           'fecha_envio,campaign_name,remitente,asunto,emails_entregados,aperturas_unicas,clicks_unicos,rebotes_total,rebotes_duros,rebotes_suaves,open_rate,ctr,ctor',
           { count: 'exact' }
         ).eq('cliente_id', client);
+
+        // Aplicar filtro de remitente si existe
+        if (selectedRemitente) {
+          query = query.eq('remitente', selectedRemitente);
+        }
 
         // Aplicar filtro de búsqueda si existe
         if (searchTerm) {
@@ -90,9 +95,14 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
     }
 
     fetchCampaigns();
-  }, [client, currentPage, sortColumn, sortDirection, searchTerm, filterCriteria.startDate, filterCriteria.endDate]);
+  }, [client, currentPage, sortColumn, sortDirection, searchTerm, filterCriteria.startDate, filterCriteria.endDate, selectedRemitente]);
 
   const handleSort = (column: keyof Campania) => {
+    // No permitir ordenar columnas de porcentajes
+    if (column === 'open_rate' || column === 'ctr' || column === 'ctor') {
+      return;
+    }
+
     if (sortColumn === column) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
@@ -103,6 +113,11 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
   };
 
   const getSortIndicator = (column: keyof Campania) => {
+    // No mostrar indicador de ordenamiento para columnas de porcentajes
+    if (column === 'open_rate' || column === 'ctr' || column === 'ctor') {
+      return '';
+    }
+
     if (sortColumn === column) {
       return sortDirection === 'asc' ? ' 🔼' : ' 🔽';
     }
@@ -175,7 +190,9 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
                   <th
                     key={columnKey}
                     onClick={() => handleSort(columnKey as keyof Campania)}
-                    style={{ cursor: 'pointer' }}
+                    style={{ 
+                      cursor: columnKey === 'open_rate' || columnKey === 'ctr' || columnKey === 'ctor' ? 'default' : 'pointer'
+                    }}
                   >
                     {getColumnName(columnKey)}{getSortIndicator(columnKey as keyof Campania)}
                   </th>

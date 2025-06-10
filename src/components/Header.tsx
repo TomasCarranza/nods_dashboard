@@ -10,13 +10,30 @@ import NodsLogo from '/LogoNods.png';
 const CLIENTES = [
   { id: 'unab', nombre: 'UNAB' },
   { id: 'crexe', nombre: 'Crexe' },
-  { id: 'anahuac', nombre: 'Anahuac' }
+  { id: 'anahuac', nombre: 'Anahuac' },
+  { id: 'cesa_admisiones', nombre: 'Cesa Admisiones', remitente: 'educontinua.aspirante@cesa.edu.co' },
+  { id: 'cesa_servicios', nombre: 'Cesa Servicios', remitente: 'experiencia.luna@cesa.edu.co' }
 ];
 
 const Header: React.FC = () => {
   const [session, setSession] = useState<any>(null);
   const navigate = useNavigate();
-  const { client, setClient } = useClient();
+  const { client, setClient, setSelectedRemitente } = useClient();
+  const [selectedClientId, setSelectedClientId] = useState<string>('');
+
+  const handleClientChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedClient = CLIENTES.find(c => c.id === e.target.value);
+    if (selectedClient) {
+      setSelectedClientId(e.target.value);
+      // Para Cesa Admisiones y Cesa Servicios, usamos cliente_id 'cesa'
+      if (selectedClient.id === 'cesa_admisiones' || selectedClient.id === 'cesa_servicios') {
+        setClient('cesa');
+      } else {
+        setClient(selectedClient.id);
+      }
+      setSelectedRemitente(selectedClient.remitente || null);
+    }
+  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -74,8 +91,8 @@ const Header: React.FC = () => {
           }}
         >
           <select
-            value={client || ''}
-            onChange={(e) => setClient(e.target.value)}
+            value={selectedClientId}
+            onChange={handleClientChange}
             style={{
               background: 'transparent',
               border: 'none',

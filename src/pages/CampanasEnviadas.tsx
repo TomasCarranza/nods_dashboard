@@ -23,7 +23,7 @@ interface Campania {
 }
 
 const CampanasEnviadas: React.FC = () => {
-  const { client } = useClient();
+  const { client, selectedRemitente } = useClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     'fecha_envio', 'campaign_name', 'remitente', 'asunto', 'emails_entregados',
@@ -74,6 +74,11 @@ const CampanasEnviadas: React.FC = () => {
       let query = supabase.from('all_campaigns').select(
         'fecha_envio,campaign_name,remitente,asunto,emails_entregados,aperturas_unicas,clicks_unicos,rebotes_total,rebotes_duros,rebotes_suaves,open_rate,ctr,ctor',
       ).eq('cliente_id', client);
+
+      // Aplicar filtro de remitente si existe
+      if (selectedRemitente) {
+        query = query.eq('remitente', selectedRemitente);
+      }
 
       if (searchTerm) {
         query = query.ilike('campaign_name', `%${searchTerm}%`);
