@@ -33,8 +33,8 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalCampaigns, setTotalCampaigns] = useState<number>(0);
-  const [sortColumn, setSortColumn] = useState<keyof Campania | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
+  const [sortColumn, setSortColumn] = useState<keyof Campania>('fecha_envio');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
     async function fetchCampaigns() {
