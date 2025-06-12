@@ -48,6 +48,7 @@ const Contactos: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<WebhookResult | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = async () => {
     if (!email) {
@@ -63,6 +64,7 @@ const Contactos: React.FC = () => {
     setLoading(true);
     setError(null);
     setResult(null);
+    setHasSearched(true);
 
     try {
       const response = await fetch(WEBHOOK_URL, {
@@ -170,7 +172,7 @@ const Contactos: React.FC = () => {
           </div>
         )}
 
-        {!loading && !error && email && client && !(result?.subscriberInfo || (Array.isArray(result?.deliveriesInfo) && result?.deliveriesInfo.length > 0)) && (
+        {!loading && !error && hasSearched && !(result?.subscriberInfo || (Array.isArray(result?.deliveriesInfo) && result?.deliveriesInfo.length > 0)) && (
           <div className="text-white mt-4 text-center">
             <p>No se encontraron resultados para el email ingresado o cliente seleccionado.</p>
           </div>
