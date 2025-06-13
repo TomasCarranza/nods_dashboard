@@ -60,6 +60,7 @@ const LineChart: React.FC = () => {
       if (!client) {
         setData([]);
         setLoading(false);
+        setError(null);
         return;
       }
 

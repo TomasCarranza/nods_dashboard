@@ -22,11 +22,12 @@ interface CampaniasTableProps {
   searchTerm: string;
   selectedColumns: string[];
   filterCriteria: { [key: string]: string };
+  isGrupoFilterActive: boolean;
 }
 
 const CAMPAIGNS_PER_PAGE = 20;
 
-export default function CampaniasTable({ searchTerm, selectedColumns, filterCriteria }: CampaniasTableProps) {
+export default function CampaniasTable({ searchTerm, selectedColumns, filterCriteria, isGrupoFilterActive }: CampaniasTableProps) {
   const { client, selectedRemitente } = useClient();
   const [campaigns, setCampaigns] = useState<Campania[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -70,6 +71,11 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
           query = query.ilike('campaign_name', `%${searchTerm}%`);
         }
 
+        // Aplicar filtro "Grupo" si está activo
+        if (isGrupoFilterActive) {
+          query = query.ilike('campaign_name', `%Grupo%`);
+        }
+
         // Aplicar filtros de fecha
         if (filterCriteria.startDate) {
           query = query.gte('fecha_envio', filterCriteria.startDate);
@@ -98,7 +104,7 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
     }
 
     fetchCampaigns();
-  }, [client, currentPage, sortColumn, sortDirection, searchTerm, filterCriteria.startDate, filterCriteria.endDate, selectedRemitente]);
+  }, [client, currentPage, sortColumn, sortDirection, searchTerm, filterCriteria.startDate, filterCriteria.endDate, selectedRemitente, isGrupoFilterActive]);
 
   const handleSort = (column: keyof Campania) => {
     // No permitir ordenar columnas de porcentajes

@@ -27,6 +27,12 @@ const WeeklySummary: React.FC = () => {
       if (!client) {
         setLoading(false);
         setHasData(false);
+        setStats({
+          emails_enviados: 0,
+          tasa_rebote: 0,
+          tasa_clics: 0,
+          tasa_apertura: 0
+        });
         return;
       }
 

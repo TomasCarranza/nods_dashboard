@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import * as XLSX from 'xlsx';
 import Papa from 'papaparse';
 import { BsSearch, BsFilter } from 'react-icons/bs';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 interface Campania {
   fecha_envio: string;
@@ -25,6 +26,7 @@ interface Campania {
 const CampanasEnviadas: React.FC = () => {
   const { client, selectedRemitente } = useClient();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isGrupoFilterActive, setIsGrupoFilterActive] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     'fecha_envio', 'campaign_name', 'remitente', 'asunto', 'emails_entregados',
     'aperturas_unicas', 'clicks_unicos', 'rebotes_total', 'rebotes_duros',
@@ -64,6 +66,10 @@ const CampanasEnviadas: React.FC = () => {
     });
   };
 
+  const handleGrupoFilterToggle = () => {
+    setIsGrupoFilterActive(prev => !prev);
+  };
+
   const handleDownload = async (format: 'xlsx' | 'csv') => {
     if (!client) {
       alert('Seleccioná un cliente para descargar las campañas.');
@@ -78,13 +84,15 @@ const CampanasEnviadas: React.FC = () => {
         'fecha_envio,campaign_name,remitente,asunto,emails_entregados,aperturas_unicas,clicks_unicos,rebotes_total,rebotes_duros,rebotes_suaves,open_rate,ctr,ctor',
       ).eq('cliente_id', client);
 
-      // Aplicar filtro de remitente si existe
       if (selectedRemitente) {
         query = query.eq('remitente', selectedRemitente);
       }
 
       if (searchTerm) {
         query = query.ilike('campaign_name', `%${searchTerm}%`);
+      }
+      if (client === 'unab' && isGrupoFilterActive) {
+        query = query.ilike('campaign_name', `%Grupo%`);
       }
       if (filterCriteria.startDate) {
         query = query.gte('fecha_envio', filterCriteria.startDate);
@@ -189,6 +197,33 @@ const CampanasEnviadas: React.FC = () => {
         >
           <BsFilter size={18} />
         </button>
+        {client === 'unab' && (
+          <button
+            className="ms-3"
+            onClick={handleGrupoFilterToggle}
+            style={{
+              padding: '0.75rem 1.5rem',
+              borderRadius: '24px',
+              border: 'none',
+              backgroundColor: isGrupoFilterActive ? '#353535' : '#1A53F3',
+              color: '#E6E6E6',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease, border-color 0.3s ease',
+              outline: 'none',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = isGrupoFilterActive ? '#1A53F3' : '#111111';
+              e.currentTarget.style.borderColor = '#1A53F3';
+              e.currentTarget.style.borderWidth = '2px';
+              e.currentTarget.style.borderStyle = 'solid';
+            }}
+          >
+            Envío de tipificaciones {isGrupoFilterActive && <span className="ms-2"><AiOutlineCloseCircle size={18} /></span>}
+          </button>
+        )}
       </div>
 
       {showFilterOptions && (
@@ -251,17 +286,27 @@ const CampanasEnviadas: React.FC = () => {
               />
             </div>
           </div>
-          <div className="d-flex justify-content-end">
-            <button className="btn btn-success me-2" onClick={() => handleDownload('xlsx')}>Descargar XLSX</button>
-            <button className="btn btn-info" onClick={() => handleDownload('csv')}>Descargar CSV</button>
+
+          <div className="d-flex justify-content-end mt-4">
+            <button
+              className="btn btn-primary me-2"
+              onClick={() => handleDownload('xlsx')}
+              style={{ backgroundColor: '#1A53F3', border: 'none', borderRadius: '8px' }}
+            >
+              Descargar XLSX
+            </button>
+            <button
+              className="btn btn-info"
+              onClick={() => handleDownload('csv')}
+              style={{ backgroundColor: '#28A745', border: 'none', borderRadius: '8px' }}
+            >
+              Descargar CSV
+            </button>
           </div>
         </div>
       )}
-      <CampaniasTable
-        searchTerm={searchTerm}
-        selectedColumns={selectedColumns}
-        filterCriteria={filterCriteria}
-      />
+
+      <CampaniasTable searchTerm={searchTerm} selectedColumns={selectedColumns} filterCriteria={filterCriteria} isGrupoFilterActive={isGrupoFilterActive} />
     </div>
   );
 };
