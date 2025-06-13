@@ -5,9 +5,22 @@ const ChatIA: React.FC = () => (
   <div className="container py-5">
     <h2 className="text-white mb-4">Chat IA</h2>
     <div
-      className="bg-dark rounded-4 border border-secondary p-4 d-flex flex-column"
-      style={{ height: 'calc(100vh - 200px)' }} // Ajusta la altura según sea necesario
+      className="bg-dark rounded-4 border border-secondary p-4 d-flex flex-column position-relative"
+      style={{ height: 'calc(100vh - 200px)' }}
     >
+      <div className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ 
+        backdropFilter: 'blur(4px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 1,
+        borderRadius: '16px'
+      }}>
+        <div className="text-center">
+          <BsRobot size={48} className="text-primary mb-3" />
+          <h4 className="text-white mb-2">Próximamente</h4>
+          <p className="text-white-50">El chat con IA estará disponible próximamente</p>
+        </div>
+      </div>
+
       {/* Área de mensajes */}
       <div className="flex-grow-1 overflow-auto">
         {/* Mensaje inicial */}

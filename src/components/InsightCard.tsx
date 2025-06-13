@@ -4,7 +4,18 @@ import { Link } from 'react-router-dom';
 import { BsLightningCharge, BsGraphUp, BsChatDots } from 'react-icons/bs';
 
 const InsightCard: React.FC = () => (
-  <div className="h-100">
+  <div className="h-100 position-relative">
+    <div className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ 
+      backdropFilter: 'blur(4px)',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 1,
+      borderRadius: '16px'
+    }}>
+      <div className="text-center">
+        <h4 className="text-white mb-2">Próximamente</h4>
+        <p className="text-white-50">Esta funcionalidad estará disponible próximamente</p>
+      </div>
+    </div>
     <div className="mb-4">
       <div className="d-flex align-items-center gap-2 mb-3">
         <div className="p-2 bg-primary bg-opacity-10 rounded-3">
