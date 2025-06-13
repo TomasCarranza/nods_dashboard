@@ -29,13 +29,10 @@ const Home: React.FC = () => (
           <LineChart />
         </div>
       </div>
-      <div className="col-md-6">
+      <div className="col-12">
         <div className="card rounded-4 h-100 p-4" style={{ backgroundColor: '#1A1A1A', border: '1px solid #353535' }}>
           <InsightCard />
         </div>
-      </div>
-      <div className="col-md-6">
-        <div className="card rounded-4 h-100 p-4" style={{ backgroundColor: '#1A1A1A', border: '1px solid #353535' }}></div>
       </div>
     </div>
   </div>

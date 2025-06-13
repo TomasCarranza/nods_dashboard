@@ -6,10 +6,10 @@ import { BsLightningCharge, BsGraphUp, BsChatDots } from 'react-icons/bs';
 const InsightCard: React.FC = () => (
   <div className="h-100 position-relative">
     <div className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ 
-      backdropFilter: 'blur(4px)',
+      backdropFilter: 'blur(3px)',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       zIndex: 1,
-      borderRadius: '16px'
+      borderRadius: '5px'
     }}>
       <div className="text-center">
         <h4 className="text-white mb-2">Próximamente</h4>
