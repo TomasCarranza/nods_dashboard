@@ -40,7 +40,7 @@ const WeeklySummary: React.FC = () => {
         if (!supabase) {
           throw new Error('Supabase no está configurado');
         }
-        // Calcular fecha de hace 7 días
+
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
         const sevenDaysAgoStr = sevenDaysAgo.toISOString();

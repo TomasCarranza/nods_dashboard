@@ -9,7 +9,7 @@ const CLIENTES = [
   { id: 'ulinea', nombre: 'Ulinea' }
 ];
 
-// URL del webhook - deberías mover esto a un archivo de configuración
+// URL del webhook -
 const WEBHOOK_URL = 'https://tu-webhook-url.com/endpoint';
 
 export function ClientDropdown() {

@@ -1,8 +1,9 @@
 // src/App.tsx
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Header from './components/Header';
 import Home from './pages/Home';
 import CampanasEnviadas from './pages/CampanasEnviadas';
@@ -16,24 +17,21 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isSupabaseConfigured()) {
+    if (!isSupabaseConfigured() || !supabase) {
       setLoading(false);
       return;
     }
 
-    // Obtener la sesión actual
-    supabase?.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
     });
 
-    // Suscribirse a cambios en la autenticación
-    const { data: { subscription } } = supabase?.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setLoading(false);
-    }) || { data: { subscription: { unsubscribe: () => {} } } };
+    });
 
-    // Limpiar la suscripción al desmontar
     return () => {
       subscription.unsubscribe();
     };
@@ -67,47 +65,66 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
   );
 }
 
+function AppContent(): JSX.Element {
+  const location = useLocation();
+
+  return (
+    <div className="bg-black min-vh-100">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -10 }}
+          transition={{ duration: 0.15, ease: "easeInOut" }}
+          className="page-container"
+        >
+          <Routes location={location}>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/campanas-enviadas"
+              element={
+                <ProtectedRoute>
+                  <CampanasEnviadas />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/contactos"
+              element={
+                <ProtectedRoute>
+                  <Contactos />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat-ia"
+              element={
+                <ProtectedRoute>
+                  <ChatIA />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function App(): JSX.Element {
   return (
     <Router>
-      <div className="bg-black min-vh-100">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/campanas-enviadas"
-            element={
-              <ProtectedRoute>
-                <CampanasEnviadas />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/contactos"
-            element={
-              <ProtectedRoute>
-                <Contactos />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/chat-ia"
-            element={
-              <ProtectedRoute>
-                <ChatIA />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
+      <AppContent />
     </Router>
   );
 }

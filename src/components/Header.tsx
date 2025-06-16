@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { useClient } from '../context/ClientContext'
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Import the logo image
 import NodsLogo from '/LogoNods.png';
@@ -20,8 +21,26 @@ const CLIENTES = [
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { setClient, setSelectedRemitente } = useClient();
+  const { client, setClient, setSelectedRemitente } = useClient();
   const [selectedClientId, setSelectedClientId] = useState<string>('');
+  const location = useLocation();
+
+  // Sincronizar el selectedClientId con el client del contexto
+  useEffect(() => {
+    if (client) {
+      // Si el cliente es 'cesa', necesitamos determinar cuál de los dos clientes Cesa está seleccionado
+      if (client === 'cesa') {
+        const cesaClient = CLIENTES.find(c => c.id === 'cesa_admisiones' || c.id === 'cesa_servicios');
+        if (cesaClient) {
+          setSelectedClientId(cesaClient.id);
+        }
+      } else {
+        setSelectedClientId(client);
+      }
+    } else {
+      setSelectedClientId('');
+    }
+  }, [client]);
 
   const handleClientChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedClient = CLIENTES.find(c => c.id === e.target.value);
@@ -38,8 +57,8 @@ const Header: React.FC = () => {
   };
 
   const handleLogout = async () => {
-    if (isSupabaseConfigured()) {
-      await supabase?.auth.signOut();
+    if (isSupabaseConfigured() && supabase) {
+      await supabase.auth.signOut();
     }
     navigate('/login');
   };
@@ -119,10 +138,90 @@ const Header: React.FC = () => {
             fontSize: '1.25em',
           }}
         >
-          <Link to="/" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer' }}>Inicio</Link>
-          <Link to="/campanas-enviadas" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer' }}>Campañas enviadas</Link>
-          <Link to="/contactos" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer' }}>Contactos</Link>
-          <Link to="/chat-ia" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer' }}>Chat IA</Link>
+          <Link to="/" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            Inicio
+            <AnimatePresence mode="wait">
+              {location.pathname === '/' && (
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: '40%', opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  style={{ 
+                    height: '5px', 
+                    backgroundColor: '#1946E3', 
+                    borderRadius: '999px', 
+                    marginTop: '4px',
+                    position: 'absolute',
+                    bottom: '-9px'
+                  }}
+                />
+              )}
+            </AnimatePresence>
+          </Link>
+          <Link to="/campanas-enviadas" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            Campañas enviadas
+            <AnimatePresence mode="wait">
+              {location.pathname === '/campanas-enviadas' && (
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: '40%', opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  style={{ 
+                    height: '5px', 
+                    backgroundColor: '#1946E3', 
+                    borderRadius: '999px', 
+                    marginTop: '4px',
+                    position: 'absolute',
+                    bottom: '-9px'
+                  }}
+                />
+              )}
+            </AnimatePresence>
+          </Link>
+          <Link to="/contactos" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            Contactos
+            <AnimatePresence mode="wait">
+              {location.pathname === '/contactos' && (
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: '40%', opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  style={{ 
+                    height: '5px', 
+                    backgroundColor: '#1946E3', 
+                    borderRadius: '999px', 
+                    marginTop: '4px',
+                    position: 'absolute',
+                    bottom: '-9px'
+                  }}
+                />
+              )}
+            </AnimatePresence>
+          </Link>
+          <Link to="/chat-ia" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            Chat IA
+            <AnimatePresence mode="wait">
+              {location.pathname === '/chat-ia' && (
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: '40%', opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  style={{ 
+                    height: '5px', 
+                    backgroundColor: '#1946E3', 
+                    borderRadius: '999px', 
+                    marginTop: '4px',
+                    position: 'absolute',
+                    bottom: '-9px'
+                  }}
+                />
+              )}
+            </AnimatePresence>
+          </Link>
         </div>
       </div>
 

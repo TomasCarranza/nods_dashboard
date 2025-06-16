@@ -82,9 +82,9 @@ export default function Login() {
                 />
                 <button className="btn btn-outline-secondary custom-input-bg border-start-0 text-white d-flex align-items-center px-3" type="button" onClick={togglePasswordVisibility} style={{ borderColor: '#444444'}}>
                   {showPassword ? (
-                    <BsEyeSlashFill size={16} />
-                  ) : (
                     <BsEyeFill size={16} />
+                  ) : (
+                    <BsEyeSlashFill size={16} />
                   )}
                 </button>
               </div>

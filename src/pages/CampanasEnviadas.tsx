@@ -6,6 +6,7 @@ import * as XLSX from 'xlsx';
 import Papa from 'papaparse';
 import { BsSearch, BsFilter } from 'react-icons/bs';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Campania {
   fecha_envio: string;
@@ -27,6 +28,7 @@ const CampanasEnviadas: React.FC = () => {
   const { client, selectedRemitente } = useClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [isGrupoFilterActive, setIsGrupoFilterActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     'fecha_envio', 'campaign_name', 'remitente', 'asunto', 'emails_entregados',
     'aperturas_unicas', 'clicks_unicos', 'rebotes_total', 'rebotes_duros',
@@ -67,7 +69,11 @@ const CampanasEnviadas: React.FC = () => {
   };
 
   const handleGrupoFilterToggle = () => {
+    setIsLoading(true);
     setIsGrupoFilterActive(prev => !prev);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
   };
 
   const handleDownload = async (format: 'xlsx' | 'csv') => {
@@ -204,8 +210,8 @@ const CampanasEnviadas: React.FC = () => {
             style={{
               padding: '0.75rem 1.5rem',
               borderRadius: '24px',
-              border: 'none',
-              backgroundColor: isGrupoFilterActive ? '#353535' : '#1A53F3',
+              border: isGrupoFilterActive ? 'none' : '2px solid #1A53F3',
+              backgroundColor: isGrupoFilterActive ? '#1A53F3' : 'black',
               color: '#E6E6E6',
               fontSize: '1rem',
               fontWeight: '600',
@@ -213,12 +219,6 @@ const CampanasEnviadas: React.FC = () => {
               transition: 'background-color 0.3s ease, border-color 0.3s ease',
               outline: 'none',
               boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = isGrupoFilterActive ? '#1A53F3' : '#111111';
-              e.currentTarget.style.borderColor = '#1A53F3';
-              e.currentTarget.style.borderWidth = '2px';
-              e.currentTarget.style.borderStyle = 'solid';
             }}
           >
             Envío de tipificaciones {isGrupoFilterActive && <span className="ms-2"><AiOutlineCloseCircle size={18} /></span>}
@@ -306,7 +306,36 @@ const CampanasEnviadas: React.FC = () => {
         </div>
       )}
 
-      <CampaniasTable searchTerm={searchTerm} selectedColumns={selectedColumns} filterCriteria={filterCriteria} isGrupoFilterActive={isGrupoFilterActive} />
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="d-flex justify-content-center align-items-center"
+            style={{ minHeight: '200px' }}
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <CampaniasTable 
+              searchTerm={searchTerm} 
+              selectedColumns={selectedColumns} 
+              filterCriteria={filterCriteria} 
+              isGrupoFilterActive={isGrupoFilterActive} 
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

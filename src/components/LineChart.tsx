@@ -11,8 +11,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { supabase } from '../lib/supabaseClient';
-import BigNumber from 'bignumber.js';
+import { supabase } from '../lib/supabase';
 import { useClient } from '../context/ClientContext';
 
 ChartJS.register(
@@ -30,13 +29,6 @@ interface MetricData {
   sent: number;
   opened: number;
   clicked: number;
-}
-
-interface CampaignData {
-  'fecha_envio': string;
-  'emails_enviados': number;
-  'aperturas_unicas': number;
-  'clicks_unicos': number;
 }
 
 const LineChart: React.FC = () => {
@@ -71,7 +63,6 @@ const LineChart: React.FC = () => {
         const now = new Date();
         const startDate = new Date();
         
-        // Calcular la fecha de inicio según el rango seleccionado
         switch (timeRange) {
           case '7d':
             startDate.setDate(now.getDate() - 7);
@@ -82,6 +73,10 @@ const LineChart: React.FC = () => {
           case '90d':
             startDate.setDate(now.getDate() - 90);
             break;
+        }
+
+        if (!supabase) {
+          throw new Error('Supabase no está configurado');
         }
 
         let query = supabase
@@ -107,44 +102,30 @@ const LineChart: React.FC = () => {
           return;
         }
 
-        // Agrupar datos por fecha
-        const groupedData = (clientData as CampaignData[]).reduce((acc: { [key: string]: { timestamp: string; sent: BigNumber; opened: BigNumber; clicked: BigNumber } }, curr) => {
-          const date = new Date(curr['fecha_envio']).toISOString().split('T')[0];
-          if (!acc[date]) {
-            acc[date] = {
-              timestamp: date,
-              sent: new BigNumber(0),
-              opened: new BigNumber(0),
-              clicked: new BigNumber(0)
-            };
-          }
-          acc[date].sent = acc[date].sent.plus(curr['emails_enviados'] || 0);
-          acc[date].opened = acc[date].opened.plus(curr['aperturas_unicas'] || 0);
-          acc[date].clicked = acc[date].clicked.plus(curr['clicks_unicos'] || 0);
-          return acc;
-        }, {});
-
-        // Convertir el objeto agrupado a array
-        const formattedData = Object.values(groupedData).map(item => ({
-          timestamp: item.timestamp,
-          sent: item.sent.toNumber(),
-          opened: item.opened.toNumber(),
-          clicked: item.clicked.toNumber(),
+        const processedData = clientData.map(item => ({
+          timestamp: item.fecha_envio,
+          sent: item.emails_enviados || 0,
+          opened: item.aperturas_unicas || 0,
+          clicked: item.clicks_unicos || 0,
         }));
-        setData(formattedData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError(error instanceof Error ? error.message : 'Error al cargar los datos');
+
+        setData(processedData);
+      } catch (err: any) {
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [timeRange, client, selectedRemitente]);
+  }, [client, timeRange, selectedRemitente]);
 
   const chartData = {
-    labels: data.map(item => new Date(item.timestamp).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit'})),
+    labels: data.map(item => new Date(item.timestamp).toLocaleDateString('es-ES', { 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: '2-digit'
+    })),
     datasets: [
       {
         label: 'Enviados',
@@ -240,21 +221,21 @@ const LineChart: React.FC = () => {
             </div>
             <div className="d-flex gap-2">
               <span 
-                className={`badge ${selectedMetrics.sent ? 'bg-primary' : 'bg-secondary'} cursor-pointer`}
+                className={`badge ${selectedMetrics.sent ? 'bg-primary' : 'bg-secondary'}`}
                 onClick={() => toggleMetric('sent')}
                 style={{ cursor: 'pointer' }}
               >
                 Enviados
               </span>
               <span 
-                className={`badge ${selectedMetrics.opened ? 'bg-success' : 'bg-secondary'} cursor-pointer`}
+                className={`badge ${selectedMetrics.opened ? 'bg-success' : 'bg-secondary'}`}
                 onClick={() => toggleMetric('opened')}
                 style={{ cursor: 'pointer' }}
               >
                 Aperturas
               </span>
               <span 
-                className={`badge ${selectedMetrics.clicked ? 'bg-info' : 'bg-secondary'} cursor-pointer`}
+                className={`badge ${selectedMetrics.clicked ? 'bg-info' : 'bg-secondary'}`}
                 onClick={() => toggleMetric('clicked')}
                 style={{ cursor: 'pointer' }}
               >

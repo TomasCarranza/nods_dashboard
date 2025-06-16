@@ -25,34 +25,31 @@ interface CampaniasTableProps {
   isGrupoFilterActive: boolean;
 }
 
-const CAMPAIGNS_PER_PAGE = 20;
-
 export default function CampaniasTable({ searchTerm, selectedColumns, filterCriteria, isGrupoFilterActive }: CampaniasTableProps) {
   const { client, selectedRemitente } = useClient();
   const [campaigns, setCampaigns] = useState<Campania[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalCampaigns, setTotalCampaigns] = useState<number>(0);
-  const [sortColumn, setSortColumn] = useState<keyof Campania>('fecha_envio');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCampaigns, setTotalCampaigns] = useState(0);
+  const [sortColumn, setSortColumn] = useState<keyof Campania | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
+
+  const CAMPAIGNS_PER_PAGE = 10;
 
   useEffect(() => {
     async function fetchCampaigns() {
       if (!client) {
         setCampaigns([]);
         setLoading(false);
-        setError(null);
-        setTotalCampaigns(0);
         return;
       }
 
-      setLoading(true);
-      setError(null);
       try {
         if (!supabase) {
           throw new Error('Supabase no está configurado');
         }
+
         const from = (currentPage - 1) * CAMPAIGNS_PER_PAGE;
         const to = from + CAMPAIGNS_PER_PAGE - 1;
 
@@ -61,30 +58,25 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
           { count: 'exact' }
         ).eq('cliente_id', client);
 
-        // Aplicar filtro de remitente si existe
         if (selectedRemitente) {
           query = query.eq('remitente', selectedRemitente);
         }
 
-        // Aplicar filtro de búsqueda si existe
         if (searchTerm) {
           query = query.ilike('campaign_name', `%${searchTerm}%`);
         }
 
-        // Aplicar filtro "Grupo" si está activo
         if (isGrupoFilterActive) {
           query = query.ilike('campaign_name', `%Grupo%`);
         }
 
-        // Aplicar filtros de fecha
         if (filterCriteria.startDate) {
           query = query.gte('fecha_envio', filterCriteria.startDate);
         }
         if (filterCriteria.endDate) {
-          query = query.lte('fecha_envio', filterCriteria.endDate + 'T23:59:59.999Z'); // Incluir el día completo
+          query = query.lte('fecha_envio', filterCriteria.endDate + 'T23:59:59.999Z');
         }
 
-        // Apply sorting
         if (sortColumn && sortDirection) {
           query = query.order(sortColumn as string, { ascending: sortDirection === 'asc' });
         }
@@ -107,7 +99,6 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
   }, [client, currentPage, sortColumn, sortDirection, searchTerm, filterCriteria.startDate, filterCriteria.endDate, selectedRemitente, isGrupoFilterActive]);
 
   const handleSort = (column: keyof Campania) => {
-    // No permitir ordenar columnas de porcentajes
     if (column === 'open_rate' || column === 'ctr' || column === 'ctor') {
       return;
     }
@@ -118,11 +109,10 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
       setSortColumn(column);
       setSortDirection('asc');
     }
-    setCurrentPage(1); // Reset to first page on sort change
+    setCurrentPage(1);
   };
 
   const getSortIndicator = (column: keyof Campania) => {
-    // No mostrar indicador de ordenamiento para columnas de porcentajes
     if (column === 'open_rate' || column === 'ctr' || column === 'ctor') {
       return '';
     }
@@ -138,6 +128,15 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  const pageWindowSize = 5; // Cantidad de botones de paginación a mostrar
+  const startPage = Math.max(1, currentPage - Math.floor(pageWindowSize / 2));
+  const endPage = Math.min(totalPages, startPage + pageWindowSize - 1);
+
+  const pageNumbers = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
 
   const allColumnsDefinition = [
     { key: 'fecha_envio', name: 'Fecha de Envío' },
@@ -170,8 +169,10 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
 
   if (loading) {
     return (
-      <div className="text-white text-center mt-4">
-        <p>Cargando campañas...</p>
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
       </div>
     );
   }
@@ -229,13 +230,23 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
                   Anterior
                 </button>
               </li>
-              {[...Array(totalPages)].map((_, index) => (
-                <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                  <button className="page-link" onClick={() => handlePageChange(index + 1)}>
-                    {index + 1}
+              {startPage > 1 && (
+                <li className="page-item disabled">
+                  <span className="page-link">...</span>
+                </li>
+              )}
+              {pageNumbers.map((pageNumber) => (
+                <li key={pageNumber} className={`page-item ${currentPage === pageNumber ? 'active' : ''}`}>
+                  <button className="page-link" onClick={() => handlePageChange(pageNumber)}>
+                    {pageNumber}
                   </button>
                 </li>
               ))}
+              {endPage < totalPages && (
+                <li className="page-item disabled">
+                  <span className="page-link">...</span>
+                </li>
+              )}
               <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                 <button className="page-link" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
                   Siguiente

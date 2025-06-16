@@ -22,15 +22,8 @@ export function ClientProvider({ children }: ClientProviderProps) {
   const [client, setClient] = useState<string | null>(null);
   const [selectedRemitente, setSelectedRemitente] = useState<string | null>(null);
 
-  const value = {
-    client,
-    setClient,
-    selectedRemitente,
-    setSelectedRemitente
-  };
-
   return (
-    <ClientContext.Provider value={value}>
+    <ClientContext.Provider value={{ client, setClient, selectedRemitente, setSelectedRemitente }}>
       {children}
     </ClientContext.Provider>
   );
