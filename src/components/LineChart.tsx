@@ -87,7 +87,9 @@ const LineChart: React.FC = () => {
           .lte('fecha_envio', now.toISOString())
           .order('fecha_envio', { ascending: true });
 
-        if (selectedRemitente) {
+        if (client === 'cesa' && selectedRemitente === 'cesa_servicios') {
+          query = query.in('remitente', ['experiencia.luna@cesa.edu.co', 'experiencia.cesa@cesa.edu.co']);
+        } else if (selectedRemitente) {
           query = query.eq('remitente', selectedRemitente);
         }
 

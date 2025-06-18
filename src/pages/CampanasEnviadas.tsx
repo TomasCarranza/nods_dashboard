@@ -90,7 +90,11 @@ const CampanasEnviadas: React.FC = () => {
         'fecha_envio,campaign_name,remitente,asunto,emails_entregados,aperturas_unicas,clicks_unicos,rebotes_total,rebotes_duros,rebotes_suaves,open_rate,ctr,ctor',
       ).eq('cliente_id', client);
 
-      if (selectedRemitente) {
+      // Obtener el cliente seleccionado en el Header desde localStorage
+      const selectedClientId = localStorage.getItem('selectedClientId');
+      if (client === 'cesa' && selectedClientId === 'cesa_servicios') {
+        query = query.in('remitente', ['experiencia.luna@cesa.edu.co', 'experiencia.cesa@cesa.edu.co']);
+      } else if (selectedRemitente) {
         query = query.eq('remitente', selectedRemitente);
       }
 

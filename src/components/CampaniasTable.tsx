@@ -32,8 +32,8 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCampaigns, setTotalCampaigns] = useState(0);
-  const [sortColumn, setSortColumn] = useState<keyof Campania | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
+  const [sortColumn, setSortColumn] = useState<keyof Campania | null>('fecha_envio');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('desc');
 
   const CAMPAIGNS_PER_PAGE = 10;
 
@@ -58,7 +58,9 @@ export default function CampaniasTable({ searchTerm, selectedColumns, filterCrit
           { count: 'exact' }
         ).eq('cliente_id', client);
 
-        if (selectedRemitente) {
+        if (client === 'cesa' && selectedRemitente === 'cesa_servicios') {
+          query = query.in('remitente', ['experiencia.luna@cesa.edu.co', 'experiencia.cesa@cesa.edu.co']);
+        } else if (selectedRemitente) {
           query = query.eq('remitente', selectedRemitente);
         }
 

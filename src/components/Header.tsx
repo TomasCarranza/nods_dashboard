@@ -13,7 +13,7 @@ const CLIENTES = [
   { id: 'crexe', nombre: 'Crexe' },
   { id: 'anahuac', nombre: 'Anahuac' },
   { id: 'cesa_admisiones', nombre: 'Cesa Admisiones', remitente: 'educontinua.aspirante@cesa.edu.co' },
-  { id: 'cesa_servicios', nombre: 'Cesa Servicios', remitente: 'experiencia.luna@cesa.edu.co' },
+  { id: 'cesa_servicios', nombre: 'Cesa Servicios', remitentes: ['experiencia.luna@cesa.edu.co', 'experiencia.cesa@cesa.edu.co'] },
   { id: 'ulinea', nombre: 'Ulinea' },
   { id: 'aliatb2c', nombre: 'Aliat B2C' },
   { id: 'aliatb2b', nombre: 'Aliat B2B' }
@@ -42,6 +42,10 @@ const Header: React.FC = () => {
     }
   }, [client]);
 
+  useEffect(() => {
+    localStorage.setItem('selectedClientId', selectedClientId);
+  }, [selectedClientId]);
+
   const handleClientChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedClient = CLIENTES.find(c => c.id === e.target.value);
     if (selectedClient) {
@@ -52,7 +56,11 @@ const Header: React.FC = () => {
       } else {
         setClient(selectedClient.id);
       }
-      setSelectedRemitente(selectedClient.remitente || null);
+      if (selectedClient.id === 'cesa_servicios') {
+        setSelectedRemitente(null);
+      } else {
+        setSelectedRemitente(selectedClient.remitente || null);
+      }
     }
   };
 

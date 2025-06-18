@@ -51,7 +51,9 @@ const WeeklySummary: React.FC = () => {
           .eq('cliente_id', client)
           .gte('fecha_envio', sevenDaysAgoStr);
 
-        if (selectedRemitente) {
+        if (client === 'cesa' && selectedRemitente === 'cesa_servicios') {
+          query = query.in('remitente', ['experiencia.luna@cesa.edu.co', 'experiencia.cesa@cesa.edu.co']);
+        } else if (selectedRemitente) {
           query = query.eq('remitente', selectedRemitente);
         }
 
