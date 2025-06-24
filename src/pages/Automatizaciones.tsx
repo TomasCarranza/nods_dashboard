@@ -10,7 +10,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 const Automatizaciones: React.FC = () => {
   const { client } = useClient();
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     'automation_name', 'open_rate', 'aperturas_unicas', 'clicks_unicos', 'emails_entregados', 'ctr', 'ctor', 'bounce_rate'
   ]);
