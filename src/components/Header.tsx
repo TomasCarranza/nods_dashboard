@@ -85,7 +85,7 @@ const Header: React.FC = () => {
     >
       {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <img src={NodsLogo} alt="Logo NODS" style={{ height: 28 }} />
+        <img src={NodsLogo} alt="Logo NODS" style={{ height: 26 }} />
       </div>
 
       {/* Navigation and Client Selector */}
@@ -115,7 +115,7 @@ const Header: React.FC = () => {
               border: 'none',
               color: '#FAFAFA',
               fontWeight: 600,
-              fontSize: '1em',
+              fontSize: '0.9em',
               cursor: 'pointer',
               outline: 'none',
               width: '100%',
@@ -143,7 +143,7 @@ const Header: React.FC = () => {
             color: '#FAFAFA',
             fontWeight: 500,
             letterSpacing: '-0.03em',
-            fontSize: '1.25em',
+            fontSize: '1.1em',
           }}
         >
           <Link to="/" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
@@ -213,6 +213,27 @@ const Header: React.FC = () => {
             Chat IA
             <AnimatePresence mode="wait">
               {location.pathname === '/chat-ia' && (
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: '40%', opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  style={{ 
+                    height: '5px', 
+                    backgroundColor: '#1946E3', 
+                    borderRadius: '999px', 
+                    marginTop: '4px',
+                    position: 'absolute',
+                    bottom: '-9px'
+                  }}
+                />
+              )}
+            </AnimatePresence>
+          </Link>
+          <Link to="/automatizaciones" style={{ color: '#FAFAFA', textDecoration: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            Automatizaciones
+            <AnimatePresence mode="wait">
+              {location.pathname === '/automatizaciones' && (
                 <motion.div
                   initial={{ width: 0, opacity: 0 }}
                   animate={{ width: '40%', opacity: 1 }}

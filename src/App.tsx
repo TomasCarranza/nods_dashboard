@@ -10,6 +10,7 @@ import CampanasEnviadas from './pages/CampanasEnviadas';
 import Contactos from './pages/Contactos';
 import ChatIA from './pages/ChatIA';
 import Login from './pages/Login';
+import Automatizaciones from './pages/Automatizaciones';
 import { supabase, isSupabaseConfigured } from './lib/supabase';
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -110,6 +111,14 @@ function AppContent(): JSX.Element {
               element={
                 <ProtectedRoute>
                   <ChatIA />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/automatizaciones"
+              element={
+                <ProtectedRoute>
+                  <Automatizaciones />
                 </ProtectedRoute>
               }
             />
