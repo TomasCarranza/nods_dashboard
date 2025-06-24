@@ -11,7 +11,7 @@ const Automatizaciones: React.FC = () => {
   const { client } = useClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
-    'automation_name', 'open_rate', 'aperturas_unicas', 'clicks_unicos', 'emails_entregados', 'ctr', 'ctor', 'bounce_rate'
+    'automation_name', 'open_rate', 'emails_entregados', 'aperturas_unicas', 'clicks_unicos', 'bounce_rate', 'ctr', 'ctor'
   ]);
   const [filterCriteria, setFilterCriteria] = useState<{ [key: string]: string }>({});
   const [showFilterOptions, setShowFilterOptions] = useState(false);
@@ -19,12 +19,12 @@ const Automatizaciones: React.FC = () => {
   const allColumns = [
     { key: 'automation_name', name: 'Automatización' },
     { key: 'open_rate', name: 'Open Rate' },
+    { key: 'emails_entregados', name: 'Entregados' },
     { key: 'aperturas_unicas', name: 'Aperturas únicas' },
     { key: 'clicks_unicos', name: 'Clicks únicos' },
-    { key: 'emails_entregados', name: 'Entregados' },
+    { key: 'bounce_rate', name: 'Tasa de Rebote' },
     { key: 'ctr', name: 'CTR' },
     { key: 'ctor', name: 'CTOR' },
-    { key: 'bounce_rate', name: 'Tasa de Rebote' },
   ];
 
   const handleColumnToggle = (columnKey: string) => {
