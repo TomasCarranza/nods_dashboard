@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 // Definimos la interfaz para el contexto
 interface ClientContextType {
   client: string | null;
-  setClient: (value: string) => void;
+  setClient: (value: string | null) => void;
   selectedRemitente: string | null;
   setSelectedRemitente: (value: string | null) => void;
 }
@@ -19,8 +19,31 @@ interface ClientProviderProps {
 
 // Componente Provider
 export function ClientProvider({ children }: ClientProviderProps) {
-  const [client, setClient] = useState<string | null>(null);
-  const [selectedRemitente, setSelectedRemitente] = useState<string | null>(null);
+  // Inicializar desde localStorage si existe
+  const [client, setClientState] = useState<string | null>(() => {
+    return localStorage.getItem('client') || null;
+  });
+  const [selectedRemitente, setSelectedRemitenteState] = useState<string | null>(() => {
+    return localStorage.getItem('selectedRemitente') || null;
+  });
+
+  // Sincronizar con localStorage
+  const setClient = (value: string | null) => {
+    setClientState(value);
+    if (value === null) {
+      localStorage.removeItem('client');
+    } else {
+      localStorage.setItem('client', value);
+    }
+  };
+  const setSelectedRemitente = (value: string | null) => {
+    setSelectedRemitenteState(value);
+    if (value === null) {
+      localStorage.removeItem('selectedRemitente');
+    } else {
+      localStorage.setItem('selectedRemitente', value);
+    }
+  };
 
   return (
     <ClientContext.Provider value={{ client, setClient, selectedRemitente, setSelectedRemitente }}>

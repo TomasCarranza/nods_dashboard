@@ -91,8 +91,8 @@ const CampanasEnviadas: React.FC = () => {
       ).eq('cliente_id', client);
 
       // Obtener el cliente seleccionado en el Header desde localStorage
-      const selectedClientId = localStorage.getItem('selectedClientId');
-      if (client === 'cesa' && selectedClientId === 'cesa_servicios') {
+      // const selectedClientId = localStorage.getItem('selectedClientId');
+      if (client === 'cesa' && selectedRemitente === 'cesa_servicios') {
         query = query.in('remitente', ['experiencia.luna@cesa.edu.co', 'experiencia.cesa@cesa.edu.co']);
       } else if (selectedRemitente) {
         query = query.eq('remitente', selectedRemitente);

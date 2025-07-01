@@ -21,18 +21,18 @@ const CLIENTES = [
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { client, setClient, setSelectedRemitente } = useClient();
+  const { client, setClient, setSelectedRemitente, selectedRemitente } = useClient();
   const [selectedClientId, setSelectedClientId] = useState<string>('');
   const location = useLocation();
 
   // Sincronizar el selectedClientId con el client del contexto
   useEffect(() => {
     if (client) {
-      // Si el cliente es 'cesa', necesitamos determinar cuál de los dos clientes Cesa está seleccionado
       if (client === 'cesa') {
-        const cesaClient = CLIENTES.find(c => c.id === 'cesa_admisiones' || c.id === 'cesa_servicios');
-        if (cesaClient) {
-          setSelectedClientId(cesaClient.id);
+        if (selectedRemitente === 'cesa_servicios') {
+          setSelectedClientId('cesa_servicios');
+        } else {
+          setSelectedClientId('cesa_admisiones');
         }
       } else {
         setSelectedClientId(client);
@@ -40,7 +40,7 @@ const Header: React.FC = () => {
     } else {
       setSelectedClientId('');
     }
-  }, [client]);
+  }, [client, selectedRemitente]);
 
   useEffect(() => {
     localStorage.setItem('selectedClientId', selectedClientId);
@@ -57,7 +57,7 @@ const Header: React.FC = () => {
         setClient(selectedClient.id);
       }
       if (selectedClient.id === 'cesa_servicios') {
-        setSelectedRemitente(null);
+        setSelectedRemitente('cesa_servicios');
       } else {
         setSelectedRemitente(selectedClient.remitente || null);
       }
@@ -68,6 +68,12 @@ const Header: React.FC = () => {
     if (isSupabaseConfigured() && supabase) {
       await supabase.auth.signOut();
     }
+    // Limpiar selección de cliente y remitente
+    localStorage.removeItem('client');
+    localStorage.removeItem('selectedRemitente');
+    localStorage.removeItem('selectedClientId');
+    setClient(null);
+    setSelectedRemitente(null);
     navigate('/login');
   };
 
