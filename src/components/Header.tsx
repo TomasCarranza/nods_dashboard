@@ -9,6 +9,7 @@ import NodsLogo from '/LogoNods.png';
 
 // Lista de clientes de ejemplo
 const CLIENTES = [
+  { id: 'uees', nombre: 'UEES' },
   { id: 'unab', nombre: 'UNAB' },
   { id: 'crexe', nombre: 'Crexe' },
   { id: 'anahuac', nombre: 'Anahuac' },
